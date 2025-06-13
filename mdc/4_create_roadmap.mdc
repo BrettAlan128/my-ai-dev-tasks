@@ -1,0 +1,58 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+---
+name: gen-roadmap-milestones
+description: Generate Stage 4 Roadmap & Milestones document
+inputs:
+  - name: designSignoff
+    type: string
+    prompt: "Enter the target date for Design sign-off (YYYY-MM-DD)."
+  - name: prototype
+    type: string
+    prompt: "Enter the target date for Prototype completion (YYYY-MM-DD)."
+  - name: alpha
+    type: string
+    prompt: "Enter the target date for Alpha release (YYYY-MM-DD)."
+  - name: beta
+    type: string
+    prompt: "Enter the target date for Beta release (YYYY-MM-DD)."
+  - name: launch
+    type: string
+    prompt: "Enter the target date for Launch (YYYY-MM-DD)."
+  - name: blackouts
+    type: string[]
+    optional: true
+    prompt: "List any blackout periods or constraints (date ranges)."
+  - name: researchFile
+    type: file
+    optional: true
+    prompt: "Path to research/stage-4.md if deep research was performed."
+---
+
+# Stage 4: Roadmap & Milestones
+
+<!-- Optional: merge insights from research/stage-4.md here -->
+
+## Phase Gate Milestones
+
+| Phase           | Target Date       |
+| --------------- | ----------------- |
+| Design Sign-off | {{designSignoff}} |
+| Prototype       | {{prototype}}     |
+| Alpha Release   | {{alpha}}         |
+| Beta Release    | {{beta}}          |
+| Launch          | {{launch}}        |
+
+{{#if blackouts}}
+## Blackout Periods & Constraints
+{{#each blackouts}}
+- {{this}}
+{{/each}}
+{{/if}}
+
+---
+
+After reviewing, run `/gen-roadmap-milestones --approve` to lock in this stage.

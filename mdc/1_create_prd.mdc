@@ -1,0 +1,61 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+// Cursor Stage 1 Generator: PRD Finalization
+// File: cursor-generators/gen-prd-finalize.js
+
+// This script registers a slash-command in Cursor for Stage 1: PRD Finalization.
+// It prompts the PM for inputs, offers deep research injection, and outputs the filled PRD markdown.
+
+module.exports = function register(gen) {
+  gen.command({
+    name: 'gen-prd-finalize',
+    description: 'Generate Stage 1 PRD Finalization document with optional deep research prompts',
+
+    // Required context: PM inputs and optional research file
+    inputs: [
+      { name: 'vision', type: 'string', prompt: 'Provide the draft Vision statement.' },
+      { name: 'goals', type: 'string[]', prompt: 'List your 3–5 high-level Goals/Themes.' },
+      { name: 'epics', type: 'object[]', prompt: 'Define initial Epics (name and 1–2 sentence description).', schema: { name: 'string', description: 'string' } },
+      { name: 'acceptanceCriteria', type: 'object[]', prompt: 'Provide top-level acceptance bullets for each Epic.', schema: { epicName: 'string', criteria: 'string[]' } },
+      { name: 'researchFile', type: 'file', optional: true, prompt: 'Path to research/stage-1.md if deep research was performed.' }
+    ],
+
+    // Handler: merge inputs and research into PRD skeleton
+    async run(ctx) {
+      const { vision, goals, epics, acceptanceCriteria, researchFile } = ctx.inputs;
+      let researchInsights = '';
+      if (researchFile) {
+        researchInsights = await ctx.readFile(researchFile);
+      }
+
+      // Build PRD markdown
+      let prd = `# Product Requirements Document\n`;
+      prd += `\n---\n`;
+      prd += `## Vision\n${vision}\n\n`;
+      if (researchInsights) {
+        prd += `<!-- Research Insights:\n${researchInsights}\n-->\n`;
+      }
+      prd += `## Goals/Themes\n`;
+      goals.forEach((g, i) => {
+        prd += `${i+1}. ${g}\n`;
+      });
+      prd += `\n## Epics & High-level Acceptance Criteria\n`;
+      epics.forEach(e => {
+        const criteria = acceptanceCriteria.find(c => c.epicName === e.name)?.criteria || [];
+        prd += `### Epic: ${e.name}\n${e.description}\n`;
+        prd += `#### Acceptance Criteria:\n`;
+        criteria.forEach(c => prd += `- [ ] ${c}\n`);
+        prd += `\n`;
+      });
+
+      // Write to docs/PRD.md
+      const outputPath = 'docs/PRD.md';
+      await ctx.writeFile(outputPath, prd);
+
+      return ctx.reply(`Generated PRD skeleton at \`${outputPath}\`. Review and approve when ready.`);
+    }
+  });
+};

@@ -1,0 +1,123 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+name: gen-ai-tool-evaluation
+description: Generate Stage 6 AI-Tool Evaluation shortlist with confidence ratings
+inputs:
+
+name: gaps
+type: string[]
+prompt: "List the Epics or capability gaps where you seek AI assistance."
+
+name: evaluationAxes
+type: string[]
+prompt: "List the evaluation axes (e.g., cost, stability, integration complexity, privacy)."
+
+name: researchFile
+type: file
+optional: true
+prompt: "Path to research/stage-6.md if deep research was performed."
+
+name: suggestConfidence
+type: boolean
+optional: true
+prompt: "Should AI suggest confidence scores based on research insights?"
+
+Stage 6: AI-Tool Evaluation
+
+1. Stage Overview
+
+Goal: Shortlist AI tools/models to fill capability gaps with confidence ratings.
+
+Inputs (from PM):
+
+Gaps (Epics or capabilities needing AI)
+
+Evaluation Axes (criteria for scoring)
+
+Optional researchFile containing deep research insights
+
+suggestConfidence flag
+
+2. Deep Research Offer (Optional)
+
+If you haven’t yet, run a focused deep research to populate candidates and confidence scores:
+
+## Deep Research: AI Model & Tool Landscape
+
+**Model Selection (choose one):**
+- ChatGPT UI (paste this block into ChatGPT → GPT-4/4o)
+- Gemini API (send via your Vertex AI endpoint)
+
+**Objective:** Identify and evaluate AI tools/models for our specified gaps.
+
+**Instructions:**
+1. List 5–7 AI tools/models relevant to each gap.
+2. For each, capture:
+   - **Tool/Model**
+   - **Core Capability**
+   - **Latest Major Release Date**
+   - **Pricing Model**
+   - **Integration Method** (API/SDK/CLI)
+   - **Community Feedback or Case Study**
+   - **Confidence (0–100%)**: How suitable is this tool based on available info?
+
+**Deliverable Format:**
+- Table: Tool/Model → Capability → Release Date → Pricing → Integration → Confidence → Notes
+- 2–3 bullet insights on top picks
+
+Merge your research into research/stage-6.md and reference it below.
+
+3. Shortlist Template
+
+Capability Gaps for AI Assistance
+
+{{#each gaps}}
+
+{{this}}
+{{/each}}
+
+Evaluation Axes
+
+{{#each evaluationAxes}}
+
+{{this}}
+{{/each}}
+
+Shortlist of AI Tools & Models
+
+Tool/Model
+
+Capability
+
+Latest Release
+
+Pricing
+
+Integration
+
+Confidence (0–100%)
+
+Notes
+
+{{#each tools}}
+
+{{tool}}
+
+{{capability}}
+
+{{releaseDate}}
+
+{{pricing}}
+
+{{integration}}
+
+{{#if suggestConfidence}}{{confidence}}{{else}}-{{/if}}
+
+{{notes}}
+
+{{/each}}
+
+// After reviewing and editing as needed, run /gen-ai-tool-evaluation --approve to lock in this stage.

@@ -1,0 +1,56 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+---
+
+name: gen-resource-plan
+description: Generate Stage 5 Assemble & Align Team resource plan
+inputs:
+
+* name: epics
+  type: string\[]
+  prompt: "List the names of your Epics."
+* name: skillsPerEpic
+  type: object\[]
+  prompt: "For each Epic, list the required skills/tools (as a comma-separated list)."
+  schema:
+  epic: string
+  skills: string\[]
+* name: roles
+  type: object\[]
+  prompt: "List the project roles and the assigned owner (roleName, owner)."
+  schema:
+  roleName: string
+  owner: string
+* name: researchFile
+  type: file
+  optional: true
+  prompt: "Path to research/stage-5.md if deep research was performed."
+
+---
+
+# Stage 5: Assemble & Align Team
+
+<!-- If you provided researchFile, merge its contents here as insights -->
+
+## Epic Skill & Tool Requirements
+
+| Epic                    | Required Skills & Tools                |
+| ----------------------- | -------------------------------------- |
+| {{#each skillsPerEpic}} |                                        |
+| {{epic}}                | {{#join skills ", "}}{{this}}{{/join}} |
+| {{/each}}               |                                        |
+
+## Team Roles & Ownership
+
+| Role            | Owner     |
+| --------------- | --------- |
+| {{#each roles}} |           |
+| {{roleName}}    | {{owner}} |
+| {{/each}}       |           |
+
+---
+
+// After reviewing the resource plan, run `/gen-resource-plan --approve` to lock in this stage.

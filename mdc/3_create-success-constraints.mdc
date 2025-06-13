@@ -1,0 +1,64 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+// Cursor Stage 3 Generator: Define Success & Constraints
+// File: cursor-generators/gen-success-constraints.js
+
+// Registers the slash-command in Cursor for Stage 3: Success & Constraints.
+// Prompts the PM to provide preliminary metrics, assumptions, and high-level dependencies.
+
+module.exports = function register(gen) {
+  gen.command({
+    name: 'gen-success-constraints',
+    description: 'Generate Stage 3 Success & Constraints document',
+
+    inputs: [
+      { name: 'mvpEpics', type: 'string[]', prompt: 'List the names of Epics scoped into the MVP.' },
+      { name: 'metrics', type: 'object[]', prompt: 'Provide up to 5 preliminary metrics (name, target value, unit).', schema: { name: 'string', target: 'string', unit: 'string' } },
+      { name: 'assumptions', type: 'string[]', prompt: 'List the top-level assumptions for this phase.' },
+      { name: 'dependencies', type: 'string[]', prompt: 'List high-level dependencies or blockers.' },
+      { name: 'researchFile', type: 'file', optional: true, prompt: 'Path to research/stage-3.md if deep research was performed.' }
+    ],
+
+    async run(ctx) {
+      const { mvpEpics, metrics, assumptions, dependencies, researchFile } = ctx.inputs;
+      let researchInsights = '';
+      if (researchFile) {
+        researchInsights = await ctx.readFile(researchFile);
+      }
+
+      // Build Success & Constraints markdown
+      let md = `# Stage 3: Define Success & Constraints\n\n`;
+      md += `## MVP Epics\n`;
+      mvpEpics.forEach(e => {
+        md += `- ${e}\n`;
+      });
+      md += `\n`;
+      if (researchInsights) {
+        md += `<!-- Research Insights:\n${researchInsights}\n-->\n\n`;
+      }
+      md += `## Preliminary Metrics\n`;
+      metrics.forEach(m => {
+        md += `- **${m.name}**: ${m.target} ${m.unit}\n`;
+      });
+      md += `\n## Assumptions\n`;
+      assumptions.forEach(a => {
+        md += `- ${a}\n`;
+      });
+      md += `\n## Dependencies & Blockers\n`;
+      dependencies.forEach(d => {
+        md += `- ${d}\n`;
+      });
+      md += `\n---\n`;
+      md += `// After reviewing, run '/gen-success-constraints --approve' to lock in.`;
+
+      // Write to docs/Metrics-&-Constraints.md
+      const outputPath = 'docs/Metrics-&-Constraints.md';
+      await ctx.writeFile(outputPath, md);
+
+      return ctx.reply(`Generated Success & Constraints draft at \`${outputPath}\`. Please review and approve when ready.`);
+    }
+  });
+};

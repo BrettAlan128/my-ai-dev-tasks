@@ -1,0 +1,40 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+// Cursor Stage 2 Generator: MVP Scoping
+// File: cursor-generators/gen-mvp-scope.js
+
+// Registers the slash-command in Cursor for Stage 2: MVP Scoping.
+// Prompts the PM to tag each Epic as MVP or Post-MVP and outputs the result.
+
+module.exports = function register(gen) {
+  gen.command({
+    name: 'gen-mvp-scope',
+    description: 'Generate Stage 2 MVP Scoping document',
+
+    inputs: [
+      { name: 'epics', type: 'object[]', prompt: 'Provide your list of Epics.', schema: { name: 'string', description: 'string' } },
+    ],
+
+    async run(ctx) {
+      const { epics } = ctx.inputs;
+
+      // Build MVP Scoping markdown
+      let output = `# Stage 2: MVP Scoping\n\n`;
+      output += `## Epics MVP vs Post-MVP\n`;
+      epics.forEach(e => {
+        output += `- **Epic:** ${e.name}\n`;
+        output += `  - [ ] MVP\n`;
+        output += `  - [ ] Post-MVP\n\n`;
+      });
+      output += `---\n`;
+      output += `// After checking MVP tags, run '/gen-mvp-scope --approve' to lock in.`;
+
+      const outputPath = 'docs/MVP-Scope.md';
+      await ctx.writeFile(outputPath, output);
+      return ctx.reply(`Generated MVP Scoping template at \`${outputPath}\`. Please tag each Epic and approve.`);
+    }
+  });
+};

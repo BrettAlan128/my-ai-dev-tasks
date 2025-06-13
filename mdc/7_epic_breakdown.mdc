@@ -1,0 +1,88 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+name: gen-epic-breakdown
+description: Generate Stage 7 Epic Breakdown into feature bundles
+inputs:
+
+name: epics
+type: object[]
+prompt: "Provide your list of Epics (name and 1–2 sentence description)."
+schema:
+name: string
+description: string
+
+name: researchFile
+type: file
+optional: true
+prompt: "Path to research/stage-7.md if deep research was performed."
+
+Stage 7: Epic Breakdown
+
+1. Stage Overview
+
+Goal: Slice each Epic into cohesive feature bundles with priority and rough effort estimates.
+
+Inputs (from PM):
+
+Epics (name & description)
+
+Optional researchFile containing best-practice bundle patterns
+
+2. Deep Research Offer (Optional)
+
+If you haven’t yet, run a targeted deep research to find proven bundle patterns:
+
+## Deep Research: Proven Feature-Bundle Patterns
+
+**Objective:** Identify how similar Epics have been broken into sub-features in industry case studies.
+
+**Instructions:**
+1. For each Epic, search for public examples or templates that decompose the Epic into sub-features.
+2. Note typical bundle names and their scope.
+3. Capture any recommended ordering or effort notes.
+
+**Deliverable Format:**
+- List: Bundle Name → Typical Scope → Source URL or Reference
+
+Merge your research into research/stage-7.md and reference it below.
+
+3. Breakdown Template
+
+{{#each epics}}
+
+Epic: {{name}}
+
+{{description}}
+
+Proposed Feature Bundles
+
+Bundle Name
+
+Description
+
+Priority (MVP/Post-MVP)
+
+Effort (Low/Med/High)
+
+
+
+
+
+MVP / Post-MVP
+
+Low / Med / High
+
+
+
+
+
+
+
+
+
+{{/each}}
+
+// After reviewing, populating, and adjusting bundles, run /gen-epic-breakdown --approve to lock in this stage.

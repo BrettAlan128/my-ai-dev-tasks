@@ -1,0 +1,84 @@
+---
+
+name: gen-task-decomposition
+description: Generate Stage 9 Task Decomposition into actionable tasks
+inputs:
+
+* name: userStories
+  type: object\[]
+  prompt: "Provide your list of user stories (activity, story, releaseSlice)."
+  schema:
+  activity: string
+  story: string
+  releaseSlice: string
+* name: researchFile
+  type: file
+  optional: true
+  prompt: "Path to research/stage-9.md if deep research was performed."
+* name: taskGuidelines
+  type: string\[]
+  optional: true
+  prompt: "Optional: Task granularity guidelines (e.g., max hours/story points)."
+
+---
+
+# Stage 9: Task Decomposition
+
+## 1. Stage Overview
+
+**Goal:** Break each user story into clear, actionable development, design, and testing tasks.
+
+**Inputs (from PM):**
+
+* User stories with activity, story text, and releaseSlice
+* Optional `researchFile` with best-practice decomposition templates
+* Optional `taskGuidelines` for granularity/estimation
+
+---
+
+## 2. Deep Research Offer (Optional)
+
+If you haven’t yet, run deep research to gather task decomposition best practices:
+
+```markdown
+## Deep Research: Task-Level Best Practices
+
+**Objective:** Find norms for breaking stories into tasks and estimating effort.
+
+**Instructions:**
+1. Locate case studies or templates where similar user stories were decomposed.
+2. Note typical task types (development, testing, documentation) and sizes (hours/story points).
+3. Extract granularity guidelines (e.g., tasks ≤ 8 hours or ≤ 5 points).
+
+**Deliverable Format:**
+- Bullet guidelines list
+- Example decomposition for one user story
+```
+
+Merge your findings into `research/stage-9.md` and reference below.
+
+---
+
+## 3. Task Decomposition Template
+
+<!-- If you provided `researchFile`, its content will be injected here as insights -->
+
+| Activity              | User Story                    | Task Description | Role/Skill | Est. Effort (hrs or pts) |
+| --------------------- | ----------------------------- | ---------------- | ---------- | ------------------------ |
+| {{#each userStories}} |                               |                  |            |                          |
+| {{activity}}          | {{story}}                     |                  |            |                          |
+|                       | **Release:** {{releaseSlice}} |                  |            |                          |
+| {{/each}}             |                               |                  |            |                          |
+
+## {{#if taskGuidelines}}
+
+**Task Guidelines:**
+{{#each taskGuidelines}}
+
+* {{this}}
+  {{/each}}
+  {{/if}}
+
+---
+
+// After listing tasks and filling estimates, run `/gen-task-decomposition --approve` to lock in this stage.

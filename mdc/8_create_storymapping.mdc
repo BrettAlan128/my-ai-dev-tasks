@@ -1,0 +1,73 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+---
+
+name: gen-user-story-mapping
+description: Generate Stage 8 User-Story Mapping
+inputs:
+
+* name: featureBundles
+  type: object\[]
+  prompt: "Provide your list of feature bundles (epicName, bundleName, priority)."
+  schema:
+  epicName: string
+  bundleName: string
+  priority: string
+* name: researchFile
+  type: file
+  optional: true
+  prompt: "Path to research/stage-8.md if deep research was performed."
+
+---
+
+# Stage 8: User-Story Mapping
+
+## 1. Stage Overview
+
+**Goal:** Organize feature bundles into a user-centric map of activities and stories.
+
+**Inputs (from PM):**
+
+* Feature bundles with epicName, bundleName, and priority (MVP/Post-MVP)
+* Optional `researchFile` containing user journey and edge-case insights
+
+---
+
+## 2. Deep Research Offer (Optional)
+
+If you haven’t yet, run a targeted deep research to uncover real user flows and edge cases:
+
+```markdown
+## Deep Research: User Journey & Edge-Case Scan
+
+**Objective:** Discover common user pain points, flows, and corner cases for our features.
+
+**Instructions:**
+1. Review user reviews or forums for similar products to identify typical workflows and issues.
+2. Extract 3–5 edge scenarios (e.g., payment failure, scheduling conflict).
+3. Propose corresponding user stories.
+
+**Deliverable Format:**
+- Table: Scenario → Description → Proposed User Story
+```
+
+Merge your findings into `research/stage-8.md` and reference below.
+
+---
+
+## 3. Story Map Template
+
+<!-- If you provided `researchFile`, its content will be injected here as insights -->
+
+| Activity                 | Bundle (Epic) | User Story (As a..., I want..., so that...) | Release Slice |
+| ------------------------ | ------------- | ------------------------------------------- | ------------- |
+| {{#each featureBundles}} |               |                                             |               |
+| {{bundleName}}           | {{epicName}}  |                                             | {{priority}}  |
+| {{/each}}                |               |                                             |               |
+
+---
+
+// After populating the story map, run `/gen-user-story-mapping --approve` to lock in this stage.

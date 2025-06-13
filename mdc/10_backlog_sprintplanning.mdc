@@ -1,0 +1,92 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+---
+
+name: gen-backlog-sprint-planning
+description: Generate Stage 10 Backlog Grooming & Sprint Planning
+inputs:
+
+* name: tasks
+  type: object\[]
+  prompt: "Provide your list of prioritized tasks (activity, taskDescription, role, estEffort)."
+  schema:
+  activity: string
+  taskDescription: string
+  role: string
+  estEffort: string
+* name: sprintNumber
+  type: number
+  prompt: "Enter the sprint number (e.g., 1 for Sprint 1)."
+* name: definitionOfDone
+  type: string\[]
+  prompt: "List the Definition of Done criteria for this sprint."
+* name: researchFile
+  type: file
+  optional: true
+  prompt: "Path to research/stage-10.md if deep research was performed."
+
+---
+
+# Stage 10: Backlog Grooming & Sprint Planning
+
+## 1. Stage Overview
+
+**Goal:** Commit to Sprint {{sprintNumber}} scope by selecting top tasks and defining the sprint’s Definition of Done.
+
+**Inputs (from PM):**
+
+* Prioritized `tasks` with activity, description, role, and estimated effort
+* `sprintNumber`
+* Sprint-specific Definition of Done criteria
+* Optional `researchFile` for sprint planning benchmarks
+
+---
+
+## 2. Deep Research Offer (Optional)
+
+If you haven’t yet, run deep research to benchmark sprint velocities and planning best practices:
+
+```markdown
+## Deep Research: Sprint Planning Benchmarks
+
+**Objective:** Gather data on typical sprint scope sizes and DoD practices for similar teams.
+
+**Instructions:**
+1. Find case studies or surveys that report average velocity (story points/tasks per sprint) for new teams.
+2. Note recommended sprint lengths, ceremony cadences, and common DoD items.
+3. Highlight pitfalls to avoid in first sprint (e.g., overcommitting).
+
+**Deliverable Format:**
+- Table: Metric → Typical Value → Source
+- Bullet list of 2–3 best-practice recommendations
+```
+
+Merge insights into `research/stage-10.md` and reference below.
+
+---
+
+## 3. Sprint {{sprintNumber}} Plan
+
+<!-- If you provided `researchFile`, its content will be injected here as insights -->
+
+### Selected Tasks for Sprint {{sprintNumber}}
+
+| Activity        | Task Description    | Role/Owner | Est. Effort   |
+| --------------- | ------------------- | ---------- | ------------- |
+| {{#each tasks}} |                     |            |               |
+| {{activity}}    | {{taskDescription}} | {{role}}   | {{estEffort}} |
+| {{/each}}       |                     |            |               |
+
+### Definition of Done
+
+{{#each definitionOfDone}}
+
+* [ ] {{this}}
+  {{/each}}
+
+---
+
+// After confirming this plan, run `/gen-backlog-sprint-planning --approve` to lock in Sprint {{sprintNumber}}.
